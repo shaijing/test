@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+ferroid = { version = "1.0.2", features = ["ulid", "basic", "atomic", "serde"] }
 
 [profile.release]
 strip = true
