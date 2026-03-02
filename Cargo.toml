@@ -1,0 +1,13 @@
+[package]
+name = "test-bin"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+[profile.release]
+strip = true
+opt-level = 'z'     # 优化代码大小
+lto = true          # 启用链接时优化
+codegen-units = 1   # 降低并行度以提高优化效果
+panic = 'abort'     # 去除异常回溯信息
