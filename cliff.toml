@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.\n\n
 # template for the changelog body
 body = """
 {% if version %}\n
-## [{{ version }}] - {{ date | date(format="%Y-%m-%d") }}
+## [{{ version }}] - {{ timestamp | date(format="%Y-%m-%d") }}
 {% else %}\n
 ## [unreleased]
 {% endif %}\n
