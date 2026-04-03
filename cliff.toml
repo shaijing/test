@@ -1,0 +1,45 @@
+# git-cliff configuration file
+# https://git-cliff.org/docs/configuration
+
+[changelog]
+# changelog header
+header = """
+# Changelog\n
+All notable changes to this project will be documented in this file.\n\n
+"""
+# template for the changelog body
+body = """
+{% if version %}\n
+## [{{ version }}] - {{ date | date(format="%Y-%m-%d") }}
+{% else %}\n
+## [unreleased]
+{% endif %}\n
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | upper_first }}
+{% for commit in commits %}
+- {{ commit.message | split(pat="\n") | first }}\
+{% if commit.remote.username %} by @{{ commit.remote.username }}{% endif %}
+{% endfor %}
+{% endfor %}\n
+"""
+
+[git]
+# parse the commits based on conventional commits
+conventional_commits = true
+# filter out the commits that are not conventional
+filter_unconventional = true
+# regex for parsing conventional commits
+commit_parsers = [
+  { message = "^feat", group = "Features" },
+  { message = "^fix", group = "Bug Fixes" },
+  { message = "^doc", group = "Documentation" },
+  { message = "^perf", group = "Performance" },
+  { message = "^refactor", group = "Refactor" },
+  { message = "^style", group = "Styling" },
+  { message = "^test", group = "Testing" },
+  { message = "^chore|^ci|^build", group = "Miscellaneous Tasks" },
+]
+# filter out the commits that do not match the parsers
+filter_commits = true
+# sort the commits inside groups by date
+sort_commits = "oldest"

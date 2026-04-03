@@ -36,6 +36,14 @@ jobs:
       - name: Build Release
         run: cargo build --release --target ${{ matrix.platform.target }}
 
+      - name: "Generate Changelog"
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --tag ${{ github.ref_name }}
+        env:
+          OUTPUT: CHANGELOG.md
+
       - name: "Archive binary"
         shell: bash
         run: |
@@ -46,19 +54,10 @@ jobs:
           PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
           PLATFORM_TARGET: ${{ matrix.platform.target }}
 
-      # - name: "Upload binary"
-      #   uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-      #   with:
-      #     name: artifacts-${{ matrix.platform.target }}
-      #     path: |
-      #       *.zip
-      #       *.sha256
       - name: "Create Release"
         uses: softprops/action-gh-release@v2
-        # 💡 只有推标签时才运行，防止平时 push 代码报错
-        # if: startsWith(github.ref, 'refs/tags/')
         with:
-          generate_release_notes: true
+          body_path: CHANGELOG.md
           files: |
             *.zip
             *.sha256
